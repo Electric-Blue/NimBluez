@@ -7,6 +7,7 @@
 ## Linux.
 
 import os
+from strutils import strip
 import bluez/bz_bluetooth, bluez/bz_hci, bluez/bz_hci_lib
 
 export bdaddr_t, inquiry_info
@@ -133,6 +134,7 @@ proc name*(device: BluetoothDeviceLocal): string =
     result.setLen(BLUETOOTH_MAX_NAME_SIZE)
     if hci_read_local_name(socket, cint(len(result)), result, 0) < 0:
       raiseOSError(osLastError())
+    result = result.strip(false, true, {'\0'})
   finally:
     if hci_close_dev(socket) < 0:
       raiseOSError(osLastError())
@@ -155,6 +157,7 @@ proc name*(device: BluetoothDeviceRemote,
     if hci_read_remote_name(socket, addr(device.fInquiryInfo.bdaddr),
                             cint(len(result)), result, 0) < 0:
       raiseOSError(osLastError())
+    result = result.strip(false, true, {'\0'})
   finally:
     if hci_close_dev(socket) < 0:
       raiseOSError(osLastError())
