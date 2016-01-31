@@ -17,7 +17,6 @@
 #--
 {.passC: "-mno-ms-bitfields".}
 
-import winlean
 import ms_bthdef, ms_bthsdpdef, ms_bluetoothapis
 
 const

@@ -2,7 +2,9 @@
 #    Copyright (C) Microsoft.  All rights reserved.
 #
 
-import winlean
+from winlean import GUID, HANDLE
+
+export GUID, HANDLE
 
 type
   WCHAR* = uint16
@@ -18,8 +20,10 @@ type
   CHAR* = char
   UCHAR* = uint8
   BYTE* = byte
-#   ULONG* = int32
-#   DWORD* = int32
+  LONG* = int32
+  ULONG* = uint32
+  PULONG* = ptr ULONG
+  DWORD* = uint32
   LPSTR* = cstring
   LPDWORD* = ptr DWORD
   ULONGLONG* = uint64

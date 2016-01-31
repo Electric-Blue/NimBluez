@@ -22,7 +22,6 @@
 #Revision History:
 #
 #  --
-import winlean
 import ms_bthsdpdef
 
 template DEFINE_GUID*(name: expr; p1: int32; p2, p3: int16;

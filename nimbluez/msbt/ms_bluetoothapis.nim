@@ -11,7 +11,6 @@ when not defined(windows):
 const
   libbluetooth* = "bthprops.cpl"
 
-import winlean
 import ms_bthdef, ms_bthsdpdef
 
 const

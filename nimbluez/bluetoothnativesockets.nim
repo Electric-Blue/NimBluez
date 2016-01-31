@@ -126,7 +126,7 @@ else:
     of BTPROTO_RFCOMM: result = cint(bz_bluetooth.BTPROTO_RFCOMM)
 
 
-proc htobs*(d: int16): int16 =
+proc htobs*(d: uint16): uint16 =
   ## Converts 16-bit integers from host to Bluetooth byte order.
   ## On machines where the host byte order is the same as Bluetooth byte order,
   ## this is a no-op; otherwise, it performs a 2-byte swap operation.
@@ -136,7 +136,7 @@ proc htobs*(d: int16): int16 =
     result = d
 
 
-proc htobl*(d: int32): int32 =
+proc htobl*(d: uint32): uint32 =
   ## Converts 32-bit integers from host to Bluetooth byte order.
   ## On machines where the host byte order is the same as Bluetooth byte order,
   ## this is a no-op; otherwise, it performs a 4-byte swap operation.
@@ -146,7 +146,7 @@ proc htobl*(d: int32): int32 =
     result = d
 
 
-proc htobll*(d: int64): int64 =
+proc htobll*(d: uint64): uint64 =
   ## Converts 64-bit integers from host to Bluetooth byte order.
   ## On machines where the host byte order is the same as Bluetooth byte order,
   ## this is a no-op; otherwise, it performs a 8-byte swap operation.
@@ -247,14 +247,13 @@ proc getAddrPort*(sockAddr: L2capAddr): L2capPort
 
 when useWinVersion:
   proc getRfcommAddr*(port = RfcommPort(0), address = ""): RfcommAddr =
-    result.addressFamily = htobs(
-      toInt(BluetoothDomain.AF_BLUETOOTH).int16).uint16
+    result.addressFamily = htobs(toInt(BluetoothDomain.AF_BLUETOOTH).uint16)
     if address != nil and address != "":
       result.btAddr = htobll(
-        parseBluetoothAddress(address).ano_116103095.ullLong.int32).uint32
+        parseBluetoothAddress(address).ano_116103095.ullLong)
     #result.serviceClassId =
     #TODO: use htob... proc there.
-    result.port = htobl(if port == 0: -1'i32 else: int32(port))
+    result.port = htobl(if port == 0: cast[uint32](-1'i32) else: port)
     #result.port = htobl(ULONG(port))
 
 
@@ -291,7 +290,7 @@ when useWinVersion:
 
 
   proc getAddrString*(sockAddr: RfcommAddr): string =
-    result = $cast[BLUETOOTH_ADDRESS](btohll(sockAddr.btAddr.int64))
+    result = $cast[BLUETOOTH_ADDRESS](btohll(sockAddr.btAddr))
 
 
   proc getAddrString*(sockAddr: L2capAddr): string =

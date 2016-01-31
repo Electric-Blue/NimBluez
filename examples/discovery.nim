@@ -9,13 +9,19 @@ import ../nimbluez/bluetooth
 
 echo "Local devices:"
 for localDevice in getLocalDevices():
-  echo "$1 - $2" % [localDevice.address, localDevice.name]
+  echo "$1 - $2 - $3" % [localDevice.address,
+                         localDevice.name,
+                         localDevice.classRaw.int.toBin(32)]
 
   echo "  Remote devices:"
   for remoteDevice in localDevice.getRemoteDevices():
-    echo "  $1 - $2" % [remoteDevice.address, remoteDevice.name]
+    echo "$1 - $2 - $3" % [remoteDevice.address,
+                           remoteDevice.name,
+                           remoteDevice.classRaw.int.toBin(32)]
 
 echo ""
 echo "All remote devices:"
 for remoteDevice in getRemoteDevices():
-  echo "$1 - $2" % [remoteDevice.address, remoteDevice.name]
+  echo "$1 - $2 - $3" % [remoteDevice.address,
+                         remoteDevice.name,
+                         remoteDevice.classRaw.int.toBin(32)]

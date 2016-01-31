@@ -22,4 +22,4 @@ export BluetoothDeviceLocalImpl, BluetoothDeviceLocal
 export BluetoothDeviceRemoteImpl, BluetoothDeviceRemote
 export getLocalDevice, getLocalDevices
 export getRemoteDevice, getRemoteDevices
-export address, name
+export address, name, classRaw

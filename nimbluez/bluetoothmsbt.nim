@@ -6,7 +6,8 @@
 ## services. It is based on Microsoft Bluetooth protocol stack implementation
 ## for Windows.
 
-import os, strutils, algorithm, sequtils, winlean
+import os, strutils, algorithm, sequtils
+from winlean import WINBOOL, NO_ERROR
 import msbt/ms_bluetoothapis, msbt/ms_bthsdpdef, msbt/ms_bthdef
 
 export BLUETOOTH_ADDRESS, BLUETOOTH_RADIO_INFO, BLUETOOTH_DEVICE_INFO
@@ -220,3 +221,13 @@ proc name*(device: BluetoothDeviceRemote): string =
   var buf: array[BLUETOOTH_MAX_NAME_SIZE + 1, WCHAR]
   copyMem(addr(buf), addr(device.fDeviceInfo.szName), BLUETOOTH_MAX_NAME_SIZE)
   return cast[WideCString](addr(buf)) $ BLUETOOTH_MAX_NAME_SIZE
+
+
+proc classRaw*(device: BluetoothDeviceLocal): uint32 =
+  ## Returns raw class of remote Bluetooth device.
+  result = device.fRadioInfo.ulClassofDevice
+
+
+proc classRaw*(device: BluetoothDeviceRemote): uint32 =
+  ## Returns raw class of remote Bluetooth device.
+  result = device.fDeviceInfo.ulClassofDevice
