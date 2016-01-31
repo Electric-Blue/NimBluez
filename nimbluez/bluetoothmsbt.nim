@@ -223,11 +223,11 @@ proc name*(device: BluetoothDeviceRemote): string =
   return cast[WideCString](addr(buf)) $ BLUETOOTH_MAX_NAME_SIZE
 
 
-proc classRaw*(device: BluetoothDeviceLocal): uint32 =
-  ## Returns raw class of remote Bluetooth device.
+proc classOfDevice*(device: BluetoothDeviceLocal): uint32 =
+  ## Returns class of local Bluetooth device.
   result = device.fRadioInfo.ulClassofDevice
 
 
-proc classRaw*(device: BluetoothDeviceRemote): uint32 =
-  ## Returns raw class of remote Bluetooth device.
+proc classOfDevice*(device: BluetoothDeviceRemote): uint32 =
+  ## Returns class of remote Bluetooth device.
   result = device.fDeviceInfo.ulClassofDevice

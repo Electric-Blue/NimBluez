@@ -161,3 +161,23 @@ proc name*(device: BluetoothDeviceRemote,
   finally:
     if hci_close_dev(socket) < 0:
       raiseOSError(osLastError())
+
+proc classOfDevice*(device: BluetoothDeviceLocal): uint32 =
+  ## Returns class of local Bluetooth device.
+  var socket = hci_open_dev(cint(device.fDevId))
+  if socket < 0:
+    raiseOSError(osLastError())
+  try:
+    var c: array[3, uint8]
+    if hci_read_class_of_dev(socket, addr(c[0]), 0) < 0:
+      raiseOSError(osLastError())
+    result = (c[2].uint32 shl 16) or (c[1].uint32 shl 8) or c[0]
+  finally:
+    if hci_close_dev(socket) < 0:
+      raiseOSError(osLastError())
+
+
+proc classOfDevice*(device: BluetoothDeviceRemote): uint32 =
+  ## Returns class of remote Bluetooth device.
+  let c = device.fInquiryInfo.dev_class
+  result = (c[2].uint32 shl 16) or (c[1].uint32 shl 8) or c[0]
