@@ -15,7 +15,8 @@ when useWinVersion:
   import bluetoothmsbt
 else:
   from posix import InvalidSocket, getsockname, getpeername
-  import bluez/bz_bluetooth, bluez/bz_rfcomm, bluez/bz_l2cap
+  import bluez/bz_rfcomm, bluez/bz_l2cap
+  from bluez/bz_bluetooth import SOL_L2CAP, SOL_RFCOMM
   import bluetoothbluez
 
 export SocketHandle, SockAddr, SockLen, SockType, Port
@@ -247,13 +248,14 @@ proc getAddrPort*(sockAddr: L2capAddr): L2capPort
 
 when useWinVersion:
   proc getRfcommAddr*(port = RfcommPort(0), address = ""): RfcommAddr =
-    result.addressFamily = htobs(toInt(BluetoothDomain.AF_BLUETOOTH).uint16)
+    result.addressFamily = htobs(
+      toInt(BluetoothDomain.AF_BLUETOOTH).int16).uint16
     if address != nil and address != "":
       result.btAddr = htobll(
-        parseBluetoothAddress(address).ano_116103095.ullLong)
+        parseBluetoothAddress(address).ano_116103095.ullLong.int32).uint32
     #result.serviceClassId =
     #TODO: use htob... proc there.
-    result.port = htobl(if port == 0: cast[uint32](-1'i32) else: port)
+    result.port = htobl(if port == 0: -1'i32 else: int32(port))
     #result.port = htobl(ULONG(port))
 
 
@@ -290,7 +292,7 @@ when useWinVersion:
 
 
   proc getAddrString*(sockAddr: RfcommAddr): string =
-    result = $cast[BLUETOOTH_ADDRESS](btohll(sockAddr.btAddr))
+    result = $cast[BLUETOOTH_ADDRESS](btohll(sockAddr.btAddr.int64))
 
 
   proc getAddrString*(sockAddr: L2capAddr): string =
