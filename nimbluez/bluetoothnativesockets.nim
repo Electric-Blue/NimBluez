@@ -6,6 +6,7 @@
 ## Bluetooth.
 
 import os, nativesockets
+from endians import swapEndian16, swapEndian32, swapEndian64
 
 const useWinVersion = defined(Windows) or defined(nimdoc)
 
@@ -127,34 +128,52 @@ else:
     of BTPROTO_RFCOMM: result = cint(bz_bluetooth.BTPROTO_RFCOMM)
 
 
-proc htobs*(d: uint16): uint16 =
+proc htob*(d: SomeInteger): auto =
+  ## Converts integers from host to Bluetooth (little endian) byte order.
+  ## On machines where the host byte order is the same as Bluetooth byte order,
+  ## this is a no-op; otherwise, it performs a byte swap operation.
+  result = d
+  when cpuEndian == bigEndian:
+    var d = d
+    case sizeof(d)
+    of 1:
+      discard
+    of 2:
+      swapEndian16(addr(result), addr(d))
+    of 4:
+      swapEndian32(addr(result), addr(d))
+    of 8:
+      swapEndian64(addr(result), addr(d))
+    else:
+      raise newException(ValueError, "Invalid value size.")
+
+
+template btoh*(d: expr): expr =
+  ## Converts integers from Bluetooth (little endian) to host byte order.
+  ## On machines where the host byte order is the same as Bluetooth byte order,
+  ## this is a no-op; otherwise, it performs a byte swap operation.
+  htob(d)
+
+
+proc htobs*(d: uint16|int16): auto =
   ## Converts 16-bit integers from host to Bluetooth byte order.
   ## On machines where the host byte order is the same as Bluetooth byte order,
   ## this is a no-op; otherwise, it performs a 2-byte swap operation.
-  when cpuEndian == bigEndian:
-    swapEndian16(result, d)
-  else:
-    result = d
+  htob(d)
 
 
-proc htobl*(d: uint32): uint32 =
+proc htobl*(d: uint32|int32): auto =
   ## Converts 32-bit integers from host to Bluetooth byte order.
   ## On machines where the host byte order is the same as Bluetooth byte order,
   ## this is a no-op; otherwise, it performs a 4-byte swap operation.
-  when cpuEndian == bigEndian:
-   swapEndian32(result, d)
-  else:
-    result = d
+  htob(d)
 
 
-proc htobll*(d: uint64): uint64 =
+proc htobll*(d: uint64|int64): auto =
   ## Converts 64-bit integers from host to Bluetooth byte order.
   ## On machines where the host byte order is the same as Bluetooth byte order,
   ## this is a no-op; otherwise, it performs a 8-byte swap operation.
-  when cpuEndian == bigEndian:
-    swapEndian64(result, d)
-  else:
-    result = d
+  htob(d)
 
 
 template btohs*(d: expr): expr =
@@ -179,7 +198,7 @@ template btohll*(d: expr): expr =
 
 
 when not useWinVersion:
-  proc htob_bdaddr*(d: bdaddr_t): bdaddr_t =
+  proc htobBdaddr*(d: bdaddr_t): bdaddr_t =
     ## Converts bdaddr_t from host toBluetooth byte order.
     ## On machines where the host byte order is the same as Bluetooth,
     ## this is a no-op; otherwise, it performs a 6-byte swap operation.
@@ -189,11 +208,11 @@ when not useWinVersion:
     else:
       result = d
 
-  template btoh_bdaddr*(d: expr): expr =
+  template btohBdaddr*(d: expr): expr =
     ## Converts bdaddr_t from Bluetooth to host byte order.
     ## On machines where the host byte order is the same as Bluetooth,
     ## this is a no-op; otherwise, it performs a 6-byte swap operation.
-    htob_bdaddr(d)
+    htobBdaddr(d)
 
 
 proc newBluetoothNativeSocket*(sockType: SockType = SOCK_STREAM,
@@ -311,7 +330,7 @@ else:
   proc getRfcommAddr*(port = RfcommPort(0), address = ""): RfcommAddr =
     result.rc_family = htobs(toInt(BluetoothDomain.AF_BLUETOOTH).uint16)
     if address != nil and address != "":
-      result.rc_bdaddr = htob_bdaddr(parseBluetoothAddress(address))
+      result.rc_bdaddr = htobBdaddr(parseBluetoothAddress(address))
     if port != RfcommPort(0):
       result.rc_channel = uint8(port)
 
@@ -319,7 +338,7 @@ else:
   proc getL2capAddr*(port = L2capPort(0), address = ""): L2capAddr =
     result.l2_family = htobs(toInt(BluetoothDomain.AF_BLUETOOTH).uint16)
     if address != nil and address != "":
-      result.l2_bdaddr = htob_bdaddr(parseBluetoothAddress(address))
+      result.l2_bdaddr = htobBdaddr(parseBluetoothAddress(address))
     if port != L2capPort(0):
       result.l2_psm = htobs(cushort(port))
 
@@ -365,11 +384,11 @@ else:
 
 
   proc getAddrString*(sockAddr: RfcommAddr): string =
-    result = $btoh_bdaddr(sockAddr.rc_bdaddr)
+    result = $btohBdaddr(sockAddr.rc_bdaddr)
 
 
   proc getAddrString*(sockAddr: L2capAddr): string =
-    result = $btoh_bdaddr(sockAddr.l2_bdaddr)
+    result = $btohBdaddr(sockAddr.l2_bdaddr)
 
 
   proc getAddrPort*(sockAddr: RfcommAddr): RfcommPort =
