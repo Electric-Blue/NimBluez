@@ -14,7 +14,6 @@ To install using [Nimble](https://github.com/nim-lang/nimble) run the following:
 ```
 $ nimble install nimbluez
 ```
-(Not yet published.)
 ## Examples
 
 ```nim
