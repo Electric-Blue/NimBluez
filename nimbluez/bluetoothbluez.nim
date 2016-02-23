@@ -1,6 +1,6 @@
 # Copyright (c) 2016, Maxim V. Abramov
 # All rights reserved.
-# Look at license.txt for more info.
+# Look at LICENSE for more info.
 
 ## This module is used for discovery and managing Bluetooth devices and
 ## services. It is based on BlueZ Bluetooth protocol stack implementation for
