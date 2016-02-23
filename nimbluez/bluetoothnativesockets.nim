@@ -268,14 +268,12 @@ proc getAddrPort*(sockAddr: L2capAddr): L2capPort
 when useWinVersion:
   proc getRfcommAddr*(port = RfcommPort(0), address = ""): RfcommAddr =
     result.addressFamily = htobs(
-      toInt(BluetoothDomain.AF_BLUETOOTH).int16).uint16
+      toInt(BluetoothDomain.AF_BLUETOOTH).uint16)
     if address != nil and address != "":
       result.btAddr = htobll(
-        parseBluetoothAddress(address).ano_116103095.ullLong.int32).uint32
+        parseBluetoothAddress(address).ano_116103095.ullLong)
     #result.serviceClassId =
-    #TODO: use htob... proc there.
-    result.port = htobl(if port == 0: -1'i32 else: int32(port))
-    #result.port = htobl(ULONG(port))
+    result.port = htobl(if port == 0: -1'i32 else: port.int32).uint32
 
 
   proc getL2capAddr*(port = L2capPort(0), address = ""): L2capAddr =
