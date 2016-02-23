@@ -15,9 +15,9 @@ for localDevice in getLocalDevices():
 
   echo "  Remote devices:"
   for remoteDevice in localDevice.getRemoteDevices():
-    echo "$1 - $2 - $3" % [remoteDevice.address,
-                           remoteDevice.name,
-                           remoteDevice.classOfDevice.int.toBin(24)]
+    echo "  $1 - $2 - $3" % [remoteDevice.address,
+                             remoteDevice.name,
+                             remoteDevice.classOfDevice.int.toBin(24)]
 
 echo ""
 echo "All remote devices:"
