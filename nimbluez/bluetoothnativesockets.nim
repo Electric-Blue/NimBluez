@@ -148,7 +148,7 @@ proc htob*(d: SomeInteger): auto =
       raise newException(ValueError, "Invalid value size.")
 
 
-template btoh*(d: expr): expr =
+template btoh*(d: untyped): untyped =
   ## Converts integers from Bluetooth (little endian) to host byte order.
   ## On machines where the host byte order is the same as Bluetooth byte order,
   ## this is a no-op; otherwise, it performs a byte swap operation.
@@ -176,21 +176,21 @@ proc htobll*(d: uint64|int64): auto =
   htob(d)
 
 
-template btohs*(d: expr): expr =
+template btohs*(d: untyped): untyped =
   ## Converts 16-bit integers from Bluetooth to host byte order.
   ## On machines where the host byte order is the same as Bluetooth byte order,
   ## this is a no-op; otherwise, it performs a 2-byte swap operation.
   htobs(d)
 
 
-template btohl*(d: expr): expr =
+template btohl*(d: untyped): untyped =
   ## Converts 32-bit integers from Bluetooth to host byte order.
   ## On machines where the host byte order is the same as Bluetooth byte order,
   ## this is a no-op; otherwise, it performs a 4-byte swap operation.
   htobl(d)
 
 
-template btohll*(d: expr): expr =
+template btohll*(d: untyped): untyped =
   ## Converts 64-bit integers from Bluetooth to host byte order.
   ## On machines where the host byte order is the same as Bluetooth byte order,
   ## this is a no-op; otherwise, it performs a 8-byte swap operation.
@@ -208,7 +208,7 @@ when not useWinVersion:
     else:
       result = d
 
-  template btohBdaddr*(d: expr): expr =
+  template btohBdaddr*(d: untyped): untyped =
     ## Converts bdaddr_t from Bluetooth to host byte order.
     ## On machines where the host byte order is the same as Bluetooth,
     ## this is a no-op; otherwise, it performs a 6-byte swap operation.

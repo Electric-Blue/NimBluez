@@ -132,13 +132,13 @@ proc htobll*(d: uint64): uint64 =
   else:
     result = d
 
-template btohs*(d: expr): expr =
+template btohs*(d: untyped): untyped =
   htobs(d)
 
-template btohl*(d: expr): expr =
+template btohl*(d: untyped): untyped =
   htobl(d)
 
-template btohll*(d: expr): expr =
+template btohll*(d: untyped): untyped =
   htobll(d)
 
 type
@@ -153,7 +153,7 @@ proc btoh128*(src: ptr uint128; dst: ptr uint128) {.inline, cdecl.} =
   else:
     copyMem(dst, src, sizeof((uint128)))
 
-template htob128*(x, y: expr): expr =
+template htob128*(x, y: untyped): untyped =
   btoh128(x, y)
 
 # Bluetooth unaligned access
