@@ -2462,23 +2462,23 @@ when not defined(NO_HCI_DEFS):
   const
     HCI_MSG_HDR_SIZE* = 6
   # Command opcode pack/unpack
-  template cmd_opcode_pack*(ogf, ocf: expr): expr =
+  template cmd_opcode_pack*(ogf, ocf: untyped): untyped =
     (uint16)((ocf and 0x000003FF) or (ogf shl 10))
 
-  template cmd_opcode_ogf*(op: expr): expr =
+  template cmd_opcode_ogf*(op: untyped): untyped =
     (op shr 10)
 
-  template cmd_opcode_ocf*(op: expr): expr =
+  template cmd_opcode_ocf*(op: untyped): untyped =
     (op and 0x000003FF)
 
   # ACL handle and flags pack/unpack
-  template acl_handle_pack*(h, f: expr): expr =
+  template acl_handle_pack*(h, f: untyped): untyped =
     (uint16)((h and 0x00000FFF) or (f shl 12))
 
-  template acl_handle*(h: expr): expr =
+  template acl_handle*(h: untyped): untyped =
     (h and 0x00000FFF)
 
-  template acl_flags*(h: expr): expr =
+  template acl_flags*(h: untyped): untyped =
     (h shr 12)
 
 # HCI Socket options
