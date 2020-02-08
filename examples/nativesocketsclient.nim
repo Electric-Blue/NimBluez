@@ -1,3 +1,9 @@
+# Copyright (c) 2016, Maxim V. Abramov
+# All rights reserved.
+# Look at LICENSE for more info.
+
+## Simple Bluetooth client implementation based on sockets and RFCOMM protocol.
+
 import os
 import ../nimbluez/bluetoothnativesockets
 
