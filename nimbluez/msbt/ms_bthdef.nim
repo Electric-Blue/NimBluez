@@ -24,12 +24,16 @@
 #  --
 import ms_bthsdpdef
 
-template DEFINE_GUID*(name: untyped; p1: int32; p2, p3: int16;
-  p41, p42, p43, p44, p45, p46, p47, p48: int8): stmt {.immediate.} =
+template DEFINE_GUID*(name: untyped, p1, p2, p3,
+                      p41, p42, p43, p44, p45, p46, p47, p48: int64) =
   const
-    name* = GUID(D1: int32(p1), D2: int16(p2), D3: int16(p3),
-                D4: [int8(p41), int8(p42), int8(p43), int8(p44),
-                     int8(p45), int8(p46), int8(p47), int8(p48)])
+    name* = GUID(D1: cast[int32](p1),
+                 D2: cast[int16](p2),
+                 D3: cast[int16](p3),
+                 D4: [cast[int8](p41), cast[int8](p42),
+                      cast[int8](p43), cast[int8](p44),
+                      cast[int8](p45), cast[int8](p46),
+                      cast[int8](p47), cast[int8](p48)])
 #
 # Bluetooth 2.1 support added in KB942567
 #

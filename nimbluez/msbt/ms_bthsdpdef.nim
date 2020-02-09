@@ -92,7 +92,7 @@ type
     minAttribute*: USHORT
     maxAttribute*: USHORT
 
-  SdpQueryUuidUnion* = object  {.union.}
+  SdpQueryUuidUnion* {.union.} = object
     uuid128*: GUID
     uuid32*: ULONG
     uuid16*: USHORT

@@ -47,7 +47,7 @@ template WSAIORW*(x, y: untyped): untyped =
   (IOC_INOUT or (x) or (y))
 
 const
-  BT_PORT_ANY* = ULONG(-1)
+  BT_PORT_ANY* = 0xFFFFFFFF
   BT_PORT_MIN* = 0x00000001
   BT_PORT_MAX* = 0x0000FFFF
   BT_PORT_DYN_FIRST* = 0x00001001
@@ -316,7 +316,7 @@ const
   RFCOMM_CMD_RPN_RESPONSE* = 5
 #      RESERVED_CMD                6
 type
-  INNER_C_UNION_112492126* = object  {.union.}
+  INNER_C_UNION_112492126* {.union.} = object
     MSC*: RFCOMM_MSC_DATA
     RLS*: RFCOMM_RLS_DATA
     RPN*: RFCOMM_RPN_DATA
@@ -332,7 +332,7 @@ type
 # present in debug/checked builds of the system
 #
 type
-  INNER_C_UNION_301228124* = object  {.union.}
+  INNER_C_UNION_301228124* {.union.} = object
     connectionlessMTU*: USHORT
     data*: array[MAX_L2CAP_INFO_DATA_LENGTH, UCHAR]
 

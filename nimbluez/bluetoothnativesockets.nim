@@ -99,7 +99,6 @@ when useWinVersion:
   proc toInt*(family: ProtocolFamily): cint =
     case family
     of PF_BLUETOOTH: result = cint(ms_ws2bth.PF_BTH)
-    else: discard
 
   proc toInt*(domain: BluetoothDomain): cint =
     case domain
@@ -269,11 +268,11 @@ when useWinVersion:
   proc getRfcommAddr*(port = RfcommPort(0), address = ""): RfcommAddr =
     result.addressFamily = htobs(
       toInt(BluetoothDomain.AF_BLUETOOTH).uint16)
-    if address != nil and address != "":
+    if address != "":
       result.btAddr = htobll(
         parseBluetoothAddress(address).ano_116103095.ullLong)
     #result.serviceClassId =
-    result.port = htobl(if port == 0: -1'i32 else: port.int32).uint32
+    result.port = htobl(if port == 0: 0xFFFFFFFF'u32 else: port.uint32)
 
 
   proc getL2capAddr*(port = L2capPort(0), address = ""): L2capAddr =
@@ -327,7 +326,7 @@ when useWinVersion:
 else:
   proc getRfcommAddr*(port = RfcommPort(0), address = ""): RfcommAddr =
     result.rc_family = htobs(toInt(BluetoothDomain.AF_BLUETOOTH).uint16)
-    if address != nil and address != "":
+    if address != "":
       result.rc_bdaddr = htobBdaddr(parseBluetoothAddress(address))
     if port != RfcommPort(0):
       result.rc_channel = uint8(port)
@@ -335,7 +334,7 @@ else:
 
   proc getL2capAddr*(port = L2capPort(0), address = ""): L2capAddr =
     result.l2_family = htobs(toInt(BluetoothDomain.AF_BLUETOOTH).uint16)
-    if address != nil and address != "":
+    if address != "":
       result.l2_bdaddr = htobBdaddr(parseBluetoothAddress(address))
     if port != L2capPort(0):
       result.l2_psm = htobs(cushort(port))

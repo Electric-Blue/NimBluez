@@ -240,7 +240,7 @@ template htob128*(x, y: untyped): untyped =
 # BD Address
 
 type
-  bdaddr_t* = object {.packed.}
+  bdaddr_t* {.packed.} = object
     b*: array[6, uint8]
 
 
