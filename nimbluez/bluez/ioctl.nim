@@ -51,53 +51,53 @@ const
   IOC_WRITE* = 1
   IOC_READ* = 2
 
-template IOC_TYPECHECK*(t: expr): expr =
+template IOC_TYPECHECK*(t: untyped): untyped =
   (sizeof((t)))
 
 # used to create numbers
 
-template IO*(`type`, nr: expr): expr =
+template IO*(`type`, nr: untyped): untyped =
   (((IOC_NONE) shl IOC_DIRSHIFT) or (((`type`)) shl IOC_TYPESHIFT) or
       (((nr)) shl IOC_NRSHIFT) or ((0) shl IOC_SIZESHIFT))
 
-template IOR*(`type`, nr, size: expr): expr =
+template IOR*(`type`, nr, size: untyped): untyped =
   (((IOC_READ) shl IOC_DIRSHIFT) or (((`type`)) shl IOC_TYPESHIFT) or
       (((nr)) shl IOC_NRSHIFT) or (((IOC_TYPECHECK(size))) shl IOC_SIZESHIFT))
 
-template IOW*(`type`, nr, size: expr): expr =
+template IOW*(`type`, nr, size: untyped): untyped =
   (((IOC_WRITE) shl IOC_DIRSHIFT) or (((`type`)) shl IOC_TYPESHIFT) or
       (((nr)) shl IOC_NRSHIFT) or (((IOC_TYPECHECK(size))) shl IOC_SIZESHIFT))
 
-template IOWR*(`type`, nr, size: expr): expr =
+template IOWR*(`type`, nr, size: untyped): untyped =
   (((IOC_READ or IOC_WRITE) shl IOC_DIRSHIFT) or
       (((`type`)) shl IOC_TYPESHIFT) or (((nr)) shl IOC_NRSHIFT) or
       (((IOC_TYPECHECK(size))) shl IOC_SIZESHIFT))
 
-template IOR_BAD*(`type`, nr, size: expr): expr =
+template IOR_BAD*(`type`, nr, size: untyped): untyped =
   (((IOC_READ) shl IOC_DIRSHIFT) or (((`type`)) shl IOC_TYPESHIFT) or
       (((nr)) shl IOC_NRSHIFT) or ((sizeof((size))) shl IOC_SIZESHIFT))
 
-template IOW_BAD*(`type`, nr, size: expr): expr =
+template IOW_BAD*(`type`, nr, size: untyped): untyped =
   (((IOC_WRITE) shl IOC_DIRSHIFT) or (((`type`)) shl IOC_TYPESHIFT) or
       (((nr)) shl IOC_NRSHIFT) or ((sizeof((size))) shl IOC_SIZESHIFT))
 
-template IOWR_BAD*(`type`, nr, size: expr): expr =
+template IOWR_BAD*(`type`, nr, size: untyped): untyped =
   (((IOC_READ or IOC_WRITE) shl IOC_DIRSHIFT) or
       (((`type`)) shl IOC_TYPESHIFT) or (((nr)) shl IOC_NRSHIFT) or
       ((sizeof((size))) shl IOC_SIZESHIFT))
 
 # used to decode ioctl numbers..
 
-template IOC_DIR*(nr: expr): expr =
+template IOC_DIR*(nr: untyped): untyped =
   (((nr) shr IOC_DIRSHIFT) and IOC_DIRMASK)
 
-template IOC_TYPE*(nr: expr): expr =
+template IOC_TYPE*(nr: untyped): untyped =
   (((nr) shr IOC_TYPESHIFT) and IOC_TYPEMASK)
 
-template IOC_NR*(nr: expr): expr =
+template IOC_NR*(nr: untyped): untyped =
   (((nr) shr IOC_NRSHIFT) and IOC_NRMASK)
 
-template IOC_SIZE*(nr: expr): expr =
+template IOC_SIZE*(nr: untyped): untyped =
   (((nr) shr IOC_SIZESHIFT) and IOC_SIZEMASK)
 
 # ...and for the drivers/sound files...

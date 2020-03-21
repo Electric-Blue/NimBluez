@@ -14,6 +14,14 @@ To install using [Nimble](https://github.com/nim-lang/nimble) run the following:
 ```
 $ nimble install nimbluez
 ```
+
+### Linux
+You may need to install `libbluetooth-dev`, if you see error `could not load: libbluetooth.so` on application start.
+```
+# for Ubuntu
+ sudo apt install libbluetooth-dev
+```
+
 ## Examples
 
 ```nim

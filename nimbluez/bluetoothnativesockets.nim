@@ -1,6 +1,6 @@
 # Copyright (c) 2016, Maxim V. Abramov
 # All rights reserved.
-# Look at license.txt for more info.
+# Look at LICENSE for more info.
 
 ## This module implements a low-level cross-platform sockets interface for
 ## Bluetooth.
@@ -99,7 +99,6 @@ when useWinVersion:
   proc toInt*(family: ProtocolFamily): cint =
     case family
     of PF_BLUETOOTH: result = cint(ms_ws2bth.PF_BTH)
-    else: discard
 
   proc toInt*(domain: BluetoothDomain): cint =
     case domain
@@ -148,7 +147,7 @@ proc htob*(d: SomeInteger): auto =
       raise newException(ValueError, "Invalid value size.")
 
 
-template btoh*(d: expr): expr =
+template btoh*(d: untyped): untyped =
   ## Converts integers from Bluetooth (little endian) to host byte order.
   ## On machines where the host byte order is the same as Bluetooth byte order,
   ## this is a no-op; otherwise, it performs a byte swap operation.
@@ -176,21 +175,21 @@ proc htobll*(d: uint64|int64): auto =
   htob(d)
 
 
-template btohs*(d: expr): expr =
+template btohs*(d: untyped): untyped =
   ## Converts 16-bit integers from Bluetooth to host byte order.
   ## On machines where the host byte order is the same as Bluetooth byte order,
   ## this is a no-op; otherwise, it performs a 2-byte swap operation.
   htobs(d)
 
 
-template btohl*(d: expr): expr =
+template btohl*(d: untyped): untyped =
   ## Converts 32-bit integers from Bluetooth to host byte order.
   ## On machines where the host byte order is the same as Bluetooth byte order,
   ## this is a no-op; otherwise, it performs a 4-byte swap operation.
   htobl(d)
 
 
-template btohll*(d: expr): expr =
+template btohll*(d: untyped): untyped =
   ## Converts 64-bit integers from Bluetooth to host byte order.
   ## On machines where the host byte order is the same as Bluetooth byte order,
   ## this is a no-op; otherwise, it performs a 8-byte swap operation.
@@ -208,7 +207,7 @@ when not useWinVersion:
     else:
       result = d
 
-  template btohBdaddr*(d: expr): expr =
+  template btohBdaddr*(d: untyped): untyped =
     ## Converts bdaddr_t from Bluetooth to host byte order.
     ## On machines where the host byte order is the same as Bluetooth,
     ## this is a no-op; otherwise, it performs a 6-byte swap operation.
@@ -269,11 +268,11 @@ when useWinVersion:
   proc getRfcommAddr*(port = RfcommPort(0), address = ""): RfcommAddr =
     result.addressFamily = htobs(
       toInt(BluetoothDomain.AF_BLUETOOTH).uint16)
-    if address != nil and address != "":
+    if address != "":
       result.btAddr = htobll(
         parseBluetoothAddress(address).ano_116103095.ullLong)
     #result.serviceClassId =
-    result.port = htobl(if port == 0: -1'i32 else: port.int32).uint32
+    result.port = htobl(if port == 0: 0xFFFFFFFF'u32 else: port.uint32)
 
 
   proc getL2capAddr*(port = L2capPort(0), address = ""): L2capAddr =
@@ -327,7 +326,7 @@ when useWinVersion:
 else:
   proc getRfcommAddr*(port = RfcommPort(0), address = ""): RfcommAddr =
     result.rc_family = htobs(toInt(BluetoothDomain.AF_BLUETOOTH).uint16)
-    if address != nil and address != "":
+    if address != "":
       result.rc_bdaddr = htobBdaddr(parseBluetoothAddress(address))
     if port != RfcommPort(0):
       result.rc_channel = uint8(port)
@@ -335,7 +334,7 @@ else:
 
   proc getL2capAddr*(port = L2capPort(0), address = ""): L2capAddr =
     result.l2_family = htobs(toInt(BluetoothDomain.AF_BLUETOOTH).uint16)
-    if address != nil and address != "":
+    if address != "":
       result.l2_bdaddr = htobBdaddr(parseBluetoothAddress(address))
     if port != L2capPort(0):
       result.l2_psm = htobs(cushort(port))

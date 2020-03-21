@@ -124,7 +124,7 @@ const
 # L2CAP structures
 
 type
-  l2cap_hdr* = object {.packed.}
+  l2cap_hdr* {.packed.} = object
     len*: uint16
     cid*: uint16
 
@@ -133,7 +133,7 @@ const
   L2CAP_HDR_SIZE* = 4
 
 type
-  l2cap_cmd_hdr* = object {.packed.}
+  l2cap_cmd_hdr* {.packed.} = object
     code*: uint8
     ident*: uint8
     len*: uint16
@@ -143,7 +143,7 @@ const
   L2CAP_CMD_HDR_SIZE* = 4
 
 type
-  l2cap_cmd_rej* = object {.packed.}
+  l2cap_cmd_rej* {.packed.} = object
     reason*: uint16
 
 
@@ -151,7 +151,7 @@ const
   L2CAP_CMD_REJ_SIZE* = 2
 
 type
-  l2cap_conn_req* = object {.packed.}
+  l2cap_conn_req* {.packed.} = object
     psm*: uint16
     scid*: uint16
 
@@ -160,7 +160,7 @@ const
   L2CAP_CONN_REQ_SIZE* = 4
 
 type
-  l2cap_conn_rsp* = object {.packed.}
+  l2cap_conn_rsp* {.packed.} = object
     dcid*: uint16
     scid*: uint16
     result*: uint16
@@ -187,7 +187,7 @@ const
   L2CAP_CS_AUTHOR_PEND* = 0x00000002
 
 type
-  l2cap_conf_req* = object {.packed.}
+  l2cap_conf_req* {.packed.} = object
     dcid*: uint16
     flags*: uint16
     data*: array[0, uint8]
@@ -197,7 +197,7 @@ const
   L2CAP_CONF_REQ_SIZE* = 4
 
 type
-  l2cap_conf_rsp* = object {.packed.}
+  l2cap_conf_rsp* {.packed.} = object
     scid*: uint16
     flags*: uint16
     result*: uint16
@@ -214,7 +214,7 @@ const
   L2CAP_CONF_EFS_REJECT* = 0x00000005
 
 type
-  l2cap_conf_opt* = object {.packed.}
+  l2cap_conf_opt* {.packed.} = object
     `type`*: uint8
     len*: uint8
     val*: array[0, uint8]
@@ -240,7 +240,7 @@ const
   L2CAP_SERVTYPE_GUARANTEED* = 0x00000002
 
 type
-  l2cap_disconn_req* = object {.packed.}
+  l2cap_disconn_req* {.packed.} = object
     dcid*: uint16
     scid*: uint16
 
@@ -249,7 +249,7 @@ const
   L2CAP_DISCONN_REQ_SIZE* = 4
 
 type
-  l2cap_disconn_rsp* = object {.packed.}
+  l2cap_disconn_rsp* {.packed.} = object
     dcid*: uint16
     scid*: uint16
 
@@ -258,7 +258,7 @@ const
   L2CAP_DISCONN_RSP_SIZE* = 4
 
 type
-  l2cap_info_req* = object {.packed.}
+  l2cap_info_req* {.packed.} = object
     `type`*: uint16
 
 
@@ -266,7 +266,7 @@ const
   L2CAP_INFO_REQ_SIZE* = 2
 
 type
-  l2cap_info_rsp* = object {.packed.}
+  l2cap_info_rsp* {.packed.} = object
     `type`*: uint16
     result*: uint16
     data*: array[0, uint8]
@@ -288,7 +288,7 @@ const
   L2CAP_IR_NOTSUPP* = 0x00000001
 
 type
-  l2cap_create_req* = object {.packed.}
+  l2cap_create_req* {.packed.} = object
     psm*: uint16
     scid*: uint16
     id*: uint8
@@ -298,7 +298,7 @@ const
   L2CAP_CREATE_REQ_SIZE* = 5
 
 type
-  l2cap_create_rsp* = object {.packed.}
+  l2cap_create_rsp* {.packed.} = object
     dcid*: uint16
     scid*: uint16
     result*: uint16
@@ -309,7 +309,7 @@ const
   L2CAP_CREATE_RSP_SIZE* = 8
 
 type
-  l2cap_move_req* = object {.packed.}
+  l2cap_move_req* {.packed.} = object
     icid*: uint16
     id*: uint8
 
@@ -318,7 +318,7 @@ const
   L2CAP_MOVE_REQ_SIZE* = 3
 
 type
-  l2cap_move_rsp* = object {.packed.}
+  l2cap_move_rsp* {.packed.} = object
     icid*: uint16
     result*: uint16
 
@@ -327,7 +327,7 @@ const
   L2CAP_MOVE_RSP_SIZE* = 4
 
 type
-  l2cap_move_cfm* = object {.packed.}
+  l2cap_move_cfm* {.packed.} = object
     icid*: uint16
     result*: uint16
 
@@ -336,7 +336,7 @@ const
   L2CAP_MOVE_CFM_SIZE* = 4
 
 type
-  l2cap_move_cfm_rsp* = object {.packed.}
+  l2cap_move_cfm_rsp* {.packed.} = object
     icid*: uint16
 
 

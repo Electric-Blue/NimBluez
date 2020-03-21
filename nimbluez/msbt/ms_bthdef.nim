@@ -24,12 +24,16 @@
 #  --
 import ms_bthsdpdef
 
-template DEFINE_GUID*(name: expr; p1: int32; p2, p3: int16;
-  p41, p42, p43, p44, p45, p46, p47, p48: int8): stmt {.immediate.} =
+template DEFINE_GUID*(name: untyped, p1, p2, p3,
+                      p41, p42, p43, p44, p45, p46, p47, p48: int64) =
   const
-    name* = GUID(D1: int32(p1), D2: int16(p2), D3: int16(p3),
-                D4: [int8(p41), int8(p42), int8(p43), int8(p44),
-                     int8(p45), int8(p46), int8(p47), int8(p48)])
+    name* = GUID(D1: cast[int32](p1),
+                 D2: cast[int16](p2),
+                 D3: cast[int16](p3),
+                 D4: [cast[int8](p41), cast[int8](p42),
+                      cast[int8](p43), cast[int8](p44),
+                      cast[int8](p45), cast[int8](p46),
+                      cast[int8](p47), cast[int8](p48)])
 #
 # Bluetooth 2.1 support added in KB942567
 #
@@ -489,19 +493,19 @@ type
 const
   NAP_BIT_OFFSET* = (8 * 4)
   SAP_BIT_OFFSET* = (0)
-template GET_NAP*(bth_addr: expr): expr =
+template GET_NAP*(bth_addr: untyped): untyped =
   ((USHORT)(((bth_addr) and NAP_MASK) shr NAP_BIT_OFFSET))
 
-template GET_SAP*(bth_addr: expr): expr =
+template GET_SAP*(bth_addr: untyped): untyped =
   ((ULONG)(((bth_addr) and SAP_MASK) shr SAP_BIT_OFFSET))
 
-template SET_NAP*(nap: expr): expr =
+template SET_NAP*(nap: untyped): untyped =
   (((ULONGLONG)((USHORT)(nap))) shl NAP_BIT_OFFSET)
 
-template SET_SAP*(sap: expr): expr =
+template SET_SAP*(sap: untyped): untyped =
   (((ULONGLONG)((ULONG)(sap))) shl SAP_BIT_OFFSET)
 
-template SET_NAP_SAP*(nap, sap: expr): expr =
+template SET_NAP_SAP*(nap, sap: untyped): untyped =
   (SET_NAP(nap) or SET_SAP(sap))
 
 const
@@ -513,27 +517,27 @@ const
   COD_MINOR_MASK* = (0x000000FC)
   COD_MAJOR_MASK* = (0x00001F00)
   COD_SERVICE_MASK* = (0x00FFE000)
-template GET_COD_FORMAT*(cod: expr): expr =
+template GET_COD_FORMAT*(cod: untyped): untyped =
   ((cod) and COD_FORMAT_MASK shr COD_FORMAT_BIT_OFFSET)
 
-template GET_COD_MINOR*(cod: expr): expr =
+template GET_COD_MINOR*(cod: untyped): untyped =
   (((cod) and COD_MINOR_MASK) shr COD_MINOR_BIT_OFFSET)
 
-template GET_COD_MAJOR*(cod: expr): expr =
+template GET_COD_MAJOR*(cod: untyped): untyped =
   (((cod) and COD_MAJOR_MASK) shr COD_MAJOR_BIT_OFFSET)
 
-template GET_COD_SERVICE*(cod: expr): expr =
+template GET_COD_SERVICE*(cod: untyped): untyped =
   (((cod) and COD_SERVICE_MASK) shr COD_SERVICE_BIT_OFFSET)
 
-template SET_COD_MINOR*(cod, minor: expr): expr =
+template SET_COD_MINOR*(cod, minor: untyped): untyped =
   (cod) = ((cod) and not COD_MINOR_MASK) or
       ((minor) shl COD_MINOR_BIT_OFFSET)
 
-template SET_COD_MAJOR*(cod, major: expr): expr =
+template SET_COD_MAJOR*(cod, major: untyped): untyped =
   (cod) = ((cod) and not COD_MAJOR_MASK) or
       ((major) shl COD_MAJOR_BIT_OFFSET)
 
-template SET_COD_SERVICE*(cod, service: expr): expr =
+template SET_COD_SERVICE*(cod, service: untyped): untyped =
   (cod) = ((cod) and not COD_SERVICE_MASK) or
       ((service) shl COD_SERVICE_BIT_OFFSET)
 
@@ -642,10 +646,10 @@ const
   COD_LAN_ACCESS_BIT_OFFSET* = (5)
   COD_LAN_MINOR_MASK* = (0x0000001C)
   COD_LAN_ACCESS_MASK* = (0x000000E0)
-template GET_COD_LAN_MINOR*(cod: expr): expr =
+template GET_COD_LAN_MINOR*(cod: untyped): untyped =
   (((cod) and COD_LAN_MINOR_MASK) shr COD_MINOR_BIT_OFFSET)
 
-template GET_COD_LAN_ACCESS*(cod: expr): expr =
+template GET_COD_LAN_ACCESS*(cod: untyped): untyped =
   (((cod) and COD_LAN_ACCESS_MASK) shr COD_LAN_ACCESS_BIT_OFFSET)
 
 #
@@ -700,10 +704,10 @@ const
   BTH_ADDR_IAC_LAST* = (0x009E8B3F)
   BTH_ADDR_LIAC* = (0x009E8B00)
   BTH_ADDR_GIAC* = (0x009E8B33)
-template BTH_ERROR*(btStatus: expr): expr =
+template BTH_ERROR*(btStatus: untyped): untyped =
   ((btStatus) != BTH_ERROR_SUCCESS)
 
-template BTH_SUCCESS*(btStatus: expr): expr =
+template BTH_SUCCESS*(btStatus: untyped): untyped =
   ((btStatus) == BTH_ERROR_SUCCESS)
 
 const
@@ -927,7 +931,7 @@ type
     MITMProtectionNotRequiredGeneralBonding = 0x00000004,
     MITMProtectionRequiredGeneralBonding = 0x00000005,
     MITMProtectionNotDefined = 0x000000FF
-template IsMITMProtectionRequired*(requirements: expr): expr =
+template IsMITMProtectionRequired*(requirements: untyped): untyped =
   ((MITMProtectionRequired == requirements) or
       (MITMProtectionRequiredBonding == requirements) or
       (MITMProtectionRequiredGeneralBonding == requirements))
@@ -1112,167 +1116,167 @@ else:
     STR_ADDR_SHORT_FMT* = STR_ADDR_SHORT_FMTA
     STR_USBHCI_CLASS_HARDWAREID* = STR_USBHCI_CLASS_HARDWAREIDA
 
-template GET_BITS*(field, offset, mask: expr): expr =
+template GET_BITS*(field, offset, mask: untyped): untyped =
   (((field) shr (offset)) and (mask))
 
-template GET_BIT*(field, offset: expr): expr =
+template GET_BIT*(field, offset: untyped): untyped =
   (GET_BITS(field, offset, 0x00000001))
 
-template LMP_3_SLOT_PACKETS*(x: expr): expr =
+template LMP_3_SLOT_PACKETS*(x: untyped): untyped =
   (GET_BIT(x, 0))
 
-template LMP_5_SLOT_PACKETS*(x: expr): expr =
+template LMP_5_SLOT_PACKETS*(x: untyped): untyped =
   (GET_BIT(x, 1))
 
-template LMP_ENCRYPTION*(x: expr): expr =
+template LMP_ENCRYPTION*(x: untyped): untyped =
   (GET_BIT(x, 2))
 
-template LMP_SLOT_OFFSET*(x: expr): expr =
+template LMP_SLOT_OFFSET*(x: untyped): untyped =
   (GET_BIT(x, 3))
 
-template LMP_TIMING_ACCURACY*(x: expr): expr =
+template LMP_TIMING_ACCURACY*(x: untyped): untyped =
   (GET_BIT(x, 4))
 
-template LMP_SWITCH*(x: expr): expr =
+template LMP_SWITCH*(x: untyped): untyped =
   (GET_BIT(x, 5))
 
-template LMP_HOLD_MODE*(x: expr): expr =
+template LMP_HOLD_MODE*(x: untyped): untyped =
   (GET_BIT(x, 6))
 
-template LMP_SNIFF_MODE*(x: expr): expr =
+template LMP_SNIFF_MODE*(x: untyped): untyped =
   (GET_BIT(x, 7))
 
-template LMP_PARK_MODE*(x: expr): expr =
+template LMP_PARK_MODE*(x: untyped): untyped =
   (GET_BIT(x, 8))
 
-template LMP_RSSI*(x: expr): expr =
+template LMP_RSSI*(x: untyped): untyped =
   (GET_BIT(x, 9))
 
-template LMP_CHANNEL_QUALITY_DRIVEN_MODE*(x: expr): expr =
+template LMP_CHANNEL_QUALITY_DRIVEN_MODE*(x: untyped): untyped =
   (GET_BIT(x, 10))
 
-template LMP_SCO_LINK*(x: expr): expr =
+template LMP_SCO_LINK*(x: untyped): untyped =
   (GET_BIT(x, 11))
 
-template LMP_HV2_PACKETS*(x: expr): expr =
+template LMP_HV2_PACKETS*(x: untyped): untyped =
   (GET_BIT(x, 12))
 
-template LMP_HV3_PACKETS*(x: expr): expr =
+template LMP_HV3_PACKETS*(x: untyped): untyped =
   (GET_BIT(x, 13))
 
-template LMP_MU_LAW_LOG*(x: expr): expr =
+template LMP_MU_LAW_LOG*(x: untyped): untyped =
   (GET_BIT(x, 14))
 
-template LMP_A_LAW_LOG*(x: expr): expr =
+template LMP_A_LAW_LOG*(x: untyped): untyped =
   (GET_BIT(x, 15))
 
-template LMP_CVSD*(x: expr): expr =
+template LMP_CVSD*(x: untyped): untyped =
   (GET_BIT(x, 16))
 
-template LMP_PAGING_SCHEME*(x: expr): expr =
+template LMP_PAGING_SCHEME*(x: untyped): untyped =
   (GET_BIT(x, 17))
 
-template LMP_POWER_CONTROL*(x: expr): expr =
+template LMP_POWER_CONTROL*(x: untyped): untyped =
   (GET_BIT(x, 18))
 
-template LMP_TRANSPARENT_SCO_DATA*(x: expr): expr =
+template LMP_TRANSPARENT_SCO_DATA*(x: untyped): untyped =
   (GET_BIT(x, 19))
 
-template LMP_FLOW_CONTROL_LAG*(x: expr): expr =
+template LMP_FLOW_CONTROL_LAG*(x: untyped): untyped =
   (GET_BITS(x, 20, 0x00000003))
 
-template LMP_BROADCAST_ENCRYPTION*(x: expr): expr =
+template LMP_BROADCAST_ENCRYPTION*(x: untyped): untyped =
   (GET_BIT(x, 23))
 
-template LMP_ENHANCED_DATA_RATE_ACL_2MBPS_MODE*(x: expr): expr =
+template LMP_ENHANCED_DATA_RATE_ACL_2MBPS_MODE*(x: untyped): untyped =
   (GET_BIT(x, 25))
 
-template LMP_ENHANCED_DATA_RATE_ACL_3MBPS_MODE*(x: expr): expr =
+template LMP_ENHANCED_DATA_RATE_ACL_3MBPS_MODE*(x: untyped): untyped =
   (GET_BIT(x, 26))
 
-template LMP_ENHANCED_INQUIRY_SCAN*(x: expr): expr =
+template LMP_ENHANCED_INQUIRY_SCAN*(x: untyped): untyped =
   (GET_BIT(x, 27))
 
-template LMP_INTERLACED_INQUIRY_SCAN*(x: expr): expr =
+template LMP_INTERLACED_INQUIRY_SCAN*(x: untyped): untyped =
   (GET_BIT(x, 28))
 
-template LMP_INTERLACED_PAGE_SCAN*(x: expr): expr =
+template LMP_INTERLACED_PAGE_SCAN*(x: untyped): untyped =
   (GET_BIT(x, 29))
 
-template LMP_RSSI_WITH_INQUIRY_RESULTS*(x: expr): expr =
+template LMP_RSSI_WITH_INQUIRY_RESULTS*(x: untyped): untyped =
   (GET_BIT(x, 30))
 
-template LMP_ESCO_LINK*(x: expr): expr =
+template LMP_ESCO_LINK*(x: untyped): untyped =
   (GET_BIT(x, 31))
 
-template LMP_EV4_PACKETS*(x: expr): expr =
+template LMP_EV4_PACKETS*(x: untyped): untyped =
   (GET_BIT(x, 32))
 
-template LMP_EV5_PACKETS*(x: expr): expr =
+template LMP_EV5_PACKETS*(x: untyped): untyped =
   (GET_BIT(x, 33))
 
-template LMP_AFH_CAPABLE_SLAVE*(x: expr): expr =
+template LMP_AFH_CAPABLE_SLAVE*(x: untyped): untyped =
   (GET_BIT(x, 35))
 
-template LMP_AFH_CLASSIFICATION_SLAVE*(x: expr): expr =
+template LMP_AFH_CLASSIFICATION_SLAVE*(x: untyped): untyped =
   (GET_BIT(x, 36))
 
-template LMP_BR_EDR_NOT_SUPPORTED*(x: expr): expr =
+template LMP_BR_EDR_NOT_SUPPORTED*(x: untyped): untyped =
   (GET_BIT(x, 37))
 
-template LMP_LE_SUPPORTED*(x: expr): expr =
+template LMP_LE_SUPPORTED*(x: untyped): untyped =
   (GET_BIT(x, 38))
 
-template LMP_3SLOT_EDR_ACL_PACKETS*(x: expr): expr =
+template LMP_3SLOT_EDR_ACL_PACKETS*(x: untyped): untyped =
   (GET_BIT(x, 39))
 
-template LMP_5SLOT_EDR_ACL_PACKETS*(x: expr): expr =
+template LMP_5SLOT_EDR_ACL_PACKETS*(x: untyped): untyped =
   (GET_BIT(x, 40))
 
-template LMP_SNIFF_SUBRATING*(x: expr): expr =
+template LMP_SNIFF_SUBRATING*(x: untyped): untyped =
   (GET_BIT(x, 41))
 
-template LMP_PAUSE_ENCRYPTION*(x: expr): expr =
+template LMP_PAUSE_ENCRYPTION*(x: untyped): untyped =
   (GET_BIT(x, 42))
 
-template LMP_AFH_CAPABLE_MASTER*(x: expr): expr =
+template LMP_AFH_CAPABLE_MASTER*(x: untyped): untyped =
   (GET_BIT(x, 43))
 
-template LMP_AFH_CLASSIFICATION_MASTER*(x: expr): expr =
+template LMP_AFH_CLASSIFICATION_MASTER*(x: untyped): untyped =
   (GET_BIT(x, 44))
 
-template LMP_EDR_ESCO_2MBPS_MODE*(x: expr): expr =
+template LMP_EDR_ESCO_2MBPS_MODE*(x: untyped): untyped =
   (GET_BIT(x, 45))
 
-template LMP_EDR_ESCO_3MBPS_MODE*(x: expr): expr =
+template LMP_EDR_ESCO_3MBPS_MODE*(x: untyped): untyped =
   (GET_BIT(x, 46))
 
-template LMP_3SLOT_EDR_ESCO_PACKETS*(x: expr): expr =
+template LMP_3SLOT_EDR_ESCO_PACKETS*(x: untyped): untyped =
   (GET_BIT(x, 47))
 
-template LMP_EXTENDED_INQUIRY_RESPONSE*(x: expr): expr =
+template LMP_EXTENDED_INQUIRY_RESPONSE*(x: untyped): untyped =
   (GET_BIT(x, 48))
 
-template LMP_SIMULT_LE_BR_TO_SAME_DEV*(x: expr): expr =
+template LMP_SIMULT_LE_BR_TO_SAME_DEV*(x: untyped): untyped =
   (GET_BIT(x, 49))
 
-template LMP_SECURE_SIMPLE_PAIRING*(x: expr): expr =
+template LMP_SECURE_SIMPLE_PAIRING*(x: untyped): untyped =
   (GET_BIT(x, 51))
 
-template LMP_ENCAPSULATED_PDU*(x: expr): expr =
+template LMP_ENCAPSULATED_PDU*(x: untyped): untyped =
   (GET_BIT(x, 52))
 
-template LMP_ERRONEOUS_DATA_REPORTING*(x: expr): expr =
+template LMP_ERRONEOUS_DATA_REPORTING*(x: untyped): untyped =
   (GET_BIT(x, 53))
 
-template LMP_NON_FLUSHABLE_PACKET_BOUNDARY_FLAG*(x: expr): expr =
+template LMP_NON_FLUSHABLE_PACKET_BOUNDARY_FLAG*(x: untyped): untyped =
   (GET_BIT(x, 54))
 
-template LMP_LINK_SUPERVISION_TIMEOUT_CHANGED_EVENT*(x: expr): expr =
+template LMP_LINK_SUPERVISION_TIMEOUT_CHANGED_EVENT*(x: untyped): untyped =
   (GET_BIT(x, 56))
 
-template LMP_INQUIRY_RESPONSE_TX_POWER_LEVEL*(x: expr): expr =
+template LMP_INQUIRY_RESPONSE_TX_POWER_LEVEL*(x: untyped): untyped =
   (GET_BIT(x, 57))
 
-template LMP_EXTENDED_FEATURES*(x: expr): expr =
+template LMP_EXTENDED_FEATURES*(x: untyped): untyped =
   (GET_BIT(x, 63))

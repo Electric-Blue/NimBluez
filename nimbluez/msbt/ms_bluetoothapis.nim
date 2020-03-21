@@ -29,7 +29,7 @@ const
 #
 # ***************************************************************************
 type
-  INNER_C_UNION_1866013399* = object  {.union.}
+  INNER_C_UNION_1866013399* {.union.} = object
     ullLong*: BTH_ADDR    #  easier to compare again BLUETOOTH_NULL_ADDRESS
     rgBytes*: array[6, BYTE] #  easier to format when broken out
   BLUETOOTH_ADDRESS_STRUCT* = object
@@ -234,7 +234,7 @@ type
 # Support added after KB942567
 #
 type
-  INNER_C_UNION_2689769052* = object  {.union.}
+  INNER_C_UNION_2689769052* {.union.} = object
     Numeric_Value*: ULONG
     Passkey*: ULONG
 
@@ -1249,7 +1249,7 @@ proc BluetoothSendAuthenticationResponse*(hRadio: HANDLE;
 # Structure used when responding to BTH_REMOTE_AUTHENTICATE_REQUEST event
 #
 type
-  INNER_C_UNION_1965546500* = object  {.union.}
+  INNER_C_UNION_1965546500* {.union.} = object
     pinInfo*: BLUETOOTH_PIN_INFO
     oobInfo*: BLUETOOTH_OOB_DATA_INFO
     numericCompInfo*: BLUETOOTH_NUMERIC_COMPARISON_INFO
@@ -1329,7 +1329,7 @@ type
     length*: ULONG
 
 type
-  INNER_C_UNION_122694421* = object  {.union.}
+  INNER_C_UNION_122694421* {.union.} = object
     int128*: SDP_LARGE_INTEGER_16 # type == SDP_TYPE_INT
     # specificType == SDP_ST_INT128
     int64*: LONGLONG      # specificType == SDP_ST_INT64

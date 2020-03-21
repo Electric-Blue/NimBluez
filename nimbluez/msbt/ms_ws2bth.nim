@@ -34,20 +34,20 @@ const
   IOC_IN* = 0x80000000
   IOC_INOUT* = (IOC_IN or IOC_OUT)
 
-template WSAIO*(x, y: expr): expr =
+template WSAIO*(x, y: untyped): untyped =
   (IOC_VOID or (x) or (y))
 
-template WSAIOR*(x, y: expr): expr =
+template WSAIOR*(x, y: untyped): untyped =
   (IOC_OUT or (x) or (y))
 
-template WSAIOW*(x, y: expr): expr =
+template WSAIOW*(x, y: untyped): untyped =
   (IOC_IN or (x) or (y))
 
-template WSAIORW*(x, y: expr): expr =
+template WSAIORW*(x, y: untyped): untyped =
   (IOC_INOUT or (x) or (y))
 
 const
-  BT_PORT_ANY* = ULONG(-1)
+  BT_PORT_ANY* = 0xFFFFFFFF
   BT_PORT_MIN* = 0x00000001
   BT_PORT_MAX* = 0x0000FFFF
   BT_PORT_DYN_FIRST* = 0x00001001
@@ -214,7 +214,7 @@ const
 # SOCKET IOCTL DEFINITIONS
 #
 when not defined(BIT):
-  template BIT*(b: expr): expr =
+  template BIT*(b: untyped): untyped =
     (1 shl (b))
 
 #
@@ -231,7 +231,7 @@ const
   MSC_DV_BIT* = BIT(7)    # Data valid
                           # Break field values
   MSC_BREAK_BIT* = BIT(1) # Set if sending break
-template MSC_SET_BREAK_LENGTH*(b, l: expr): expr =
+template MSC_SET_BREAK_LENGTH*(b, l: untyped): untyped =
   ((b) = ((b) and 0x00000003) or (((l) and 0x0000000F) shl 4))
 
 type
@@ -316,7 +316,7 @@ const
   RFCOMM_CMD_RPN_RESPONSE* = 5
 #      RESERVED_CMD                6
 type
-  INNER_C_UNION_112492126* = object  {.union.}
+  INNER_C_UNION_112492126* {.union.} = object
     MSC*: RFCOMM_MSC_DATA
     RLS*: RFCOMM_RLS_DATA
     RPN*: RFCOMM_RPN_DATA
@@ -332,7 +332,7 @@ type
 # present in debug/checked builds of the system
 #
 type
-  INNER_C_UNION_301228124* = object  {.union.}
+  INNER_C_UNION_301228124* {.union.} = object
     connectionlessMTU*: USHORT
     data*: array[MAX_L2CAP_INFO_DATA_LENGTH, UCHAR]
 

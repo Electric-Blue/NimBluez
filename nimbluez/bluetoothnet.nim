@@ -1,6 +1,6 @@
 # Copyright (c) 2016, Maxim V. Abramov
 # All rights reserved.
-# Look at license.txt for more info.
+# Look at LICENSE for more info.
 
 ## This module implements a high-level cross-platform sockets interface for
 ## Bluetooth.
