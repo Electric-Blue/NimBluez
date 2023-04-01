@@ -219,7 +219,7 @@ proc newBluetoothNativeSocket*(sockType: SockType = SOCK_STREAM,
                                  SocketHandle =
   ## Creates a new Bluetooth socket; returns `InvalidSocket` if an error occurs.
   result =
-    newNativeSocket(toInt(ProtocolFamily.PF_BLUETOOTH),
+    createNativeSocket(toInt(ProtocolFamily.PF_BLUETOOTH),
                     toInt(sockType),
                     toInt(protocol))
 
